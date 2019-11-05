@@ -1,26 +1,60 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const Transaction = ({ incomeType, incomeAmount, onChangeValue, onDelete }) => {
+    return (
+        <div>
+            <span>{incomeType}</span> -{" "}
+            <input type="text" value={incomeAmount} onChange={onChangeValue} />
+            <button onClick={onDelete}>Delete</button>
+        </div>
+    );
+};
+
+const App = () => {
+    const [transactions, setTransactions] = useState([
+        { type: "income", amount: 400 }
+    ]);
+
+    const onAddTransaction = () => {
+        setTransactions([...transactions, { type: "income", amount: 0 }]);
+    };
+
+    const onChangeValue = (value, index) => {
+        let transactionsCopy = [...transactions];
+        let concreteTransactionCopy = {
+            ...transactionsCopy[index],
+            amount: value
+        };
+        transactionsCopy[index] = concreteTransactionCopy;
+
+        setTransactions(transactionsCopy);
+    };
+
+    const onDelete = index => {
+        setTransactions(
+            transactions.filter(
+                (_, transactionIndex) => transactionIndex !== index
+            )
+        );
+    };
+
+    return (
+        <div>
+            {transactions.map((transaction, index) => (
+                <Transaction
+                    key={index}
+                    incomeType={transaction.type}
+                    incomeAmount={transaction.amount}
+                    onChangeValue={event =>
+                        onChangeValue(event.target.value, index)
+                    }
+                    onDelete={() => onDelete(index)}
+                />
+            ))}
+
+            <button onClick={onAddTransaction}>Add Transaction</button>
+        </div>
+    );
+};
 
 export default App;
