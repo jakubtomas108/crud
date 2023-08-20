@@ -38,6 +38,7 @@ const App = () => {
         );
     };
 
+    // NICE!!!
     return (
         <div>
             {transactions.map((transaction, index) => (
